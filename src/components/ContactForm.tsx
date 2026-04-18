@@ -1,53 +1,39 @@
 "use client";
 
 import { useState, FormEvent } from "react";
-import { Send, CheckCircle } from "lucide-react";
+import { Send, CheckCircle, AlertCircle } from "lucide-react";
 
 export default function ContactForm() {
-  const [sent, setSent] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setLoading(true);
+    setStatus("loading");
 
     const form = e.currentTarget;
-    const data = new FormData(form);
+    const formData = new FormData(form);
 
     try {
       const res = await fetch("https://formsubmit.co/ajax/info@trairx.com", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          name: data.get("name"),
-          email: data.get("email"),
-          subject: data.get("subject"),
-          message: data.get("message"),
-          _subject: `TrairX Contact: ${data.get("subject")}`,
-        }),
+        body: formData,
       });
 
-      if (res.ok) {
-        setSent(true);
+      const data = await res.json();
+
+      if (data.success === "true" || data.success === true || res.ok) {
+        setStatus("success");
         form.reset();
+      } else {
+        setStatus("error");
       }
-    } catch {
-      // fallback to mailto
-      const name = data.get("name") as string;
-      const email = data.get("email") as string;
-      const subject = data.get("subject") as string;
-      const message = data.get("message") as string;
-      window.open(
-        `mailto:info@trairx.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`)}`,
-        "_blank"
-      );
-      setSent(true);
-    } finally {
-      setLoading(false);
+    } catch (err) {
+      console.error("Form error:", err);
+      setStatus("error");
     }
   }
 
-  if (sent) {
+  if (status === "success") {
     return (
       <div className="flex flex-col items-center justify-center rounded-2xl border border-green-500/20 bg-green-500/5 p-12 text-center">
         <CheckCircle size={48} className="text-green-400 mb-4" />
@@ -56,10 +42,29 @@ export default function ContactForm() {
           Thank you for reaching out. We will get back to you as soon as possible.
         </p>
         <button
-          onClick={() => setSent(false)}
+          onClick={() => setStatus("idle")}
           className="mt-6 text-sm text-gray-500 hover:text-white transition-colors"
         >
           Send another message
+        </button>
+      </div>
+    );
+  }
+
+  if (status === "error") {
+    return (
+      <div className="flex flex-col items-center justify-center rounded-2xl border border-red-500/20 bg-red-500/5 p-12 text-center">
+        <AlertCircle size={48} className="text-red-400 mb-4" />
+        <h3 className="text-xl font-semibold">Something went wrong</h3>
+        <p className="mt-2 text-gray-400">
+          Please try again or email us directly at{" "}
+          <a href="mailto:info@trairx.com" className="text-blue-400 hover:underline">info@trairx.com</a>
+        </p>
+        <button
+          onClick={() => setStatus("idle")}
+          className="mt-6 text-sm text-gray-500 hover:text-white transition-colors"
+        >
+          Try again
         </button>
       </div>
     );
@@ -70,7 +75,8 @@ export default function ContactForm() {
       {/* FormSubmit config */}
       <input type="hidden" name="_captcha" value="false" />
       <input type="hidden" name="_template" value="table" />
-      <input type="text" name="_honey" className="hidden" />
+      <input type="hidden" name="_subject" value="New message from trairx.com" />
+      <input type="text" name="_honey" className="hidden" tabIndex={-1} autoComplete="off" />
 
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
@@ -131,11 +137,11 @@ export default function ContactForm() {
 
       <button
         type="submit"
-        disabled={loading}
+        disabled={status === "loading"}
         className="flex items-center gap-2 rounded-full bg-white px-8 py-3.5 text-sm font-semibold text-black transition-all hover:bg-gray-200 disabled:opacity-50"
       >
         <Send size={16} />
-        {loading ? "Sending..." : "Send Message"}
+        {status === "loading" ? "Sending..." : "Send Message"}
       </button>
     </form>
   );
