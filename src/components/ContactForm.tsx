@@ -107,18 +107,33 @@ export default function ContactForm() {
         </div>
       </div>
 
-      <div>
-        <label htmlFor="subject" className="block text-sm font-medium text-gray-400 mb-2">
-          Subject
-        </label>
-        <input
-          id="subject"
-          name="subject"
-          type="text"
-          required
-          placeholder="How can we help?"
-          className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-gray-600 outline-none transition-colors focus:border-blue-500/50 focus:bg-white/[0.07]"
-        />
+      <div className="grid gap-5 sm:grid-cols-2">
+        <div>
+          <label htmlFor="phone" className="block text-sm font-medium text-gray-400 mb-2">
+            Phone
+          </label>
+          <input
+            id="phone"
+            name="phone"
+            type="tel"
+            required
+            placeholder="+90 5XX XXX XX XX"
+            className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-gray-600 outline-none transition-colors focus:border-blue-500/50 focus:bg-white/[0.07]"
+          />
+        </div>
+        <div>
+          <label htmlFor="subject" className="block text-sm font-medium text-gray-400 mb-2">
+            Subject
+          </label>
+          <input
+            id="subject"
+            name="subject"
+            type="text"
+            required
+            placeholder="How can we help?"
+            className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-gray-600 outline-none transition-colors focus:border-blue-500/50 focus:bg-white/[0.07]"
+          />
+        </div>
       </div>
 
       <div>
