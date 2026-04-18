@@ -13,27 +13,47 @@ export default function ContactForm() {
 
     const form = e.currentTarget;
     const data = new FormData(form);
-    const name = data.get("name") as string;
-    const email = data.get("email") as string;
-    const subject = data.get("subject") as string;
-    const message = data.get("message") as string;
 
-    // mailto fallback — opens user's email client
-    const mailtoLink = `mailto:info@trairx.com?subject=${encodeURIComponent(subject || "Contact Form")}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`)}`;
-    window.open(mailtoLink, "_blank");
+    try {
+      const res = await fetch("https://formsubmit.co/ajax/info@trairx.com", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          name: data.get("name"),
+          email: data.get("email"),
+          subject: data.get("subject"),
+          message: data.get("message"),
+          _subject: `TrairX Contact: ${data.get("subject")}`,
+        }),
+      });
 
-    setLoading(false);
-    setSent(true);
+      if (res.ok) {
+        setSent(true);
+        form.reset();
+      }
+    } catch {
+      // fallback to mailto
+      const name = data.get("name") as string;
+      const email = data.get("email") as string;
+      const subject = data.get("subject") as string;
+      const message = data.get("message") as string;
+      window.open(
+        `mailto:info@trairx.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`)}`,
+        "_blank"
+      );
+      setSent(true);
+    } finally {
+      setLoading(false);
+    }
   }
 
   if (sent) {
     return (
       <div className="flex flex-col items-center justify-center rounded-2xl border border-green-500/20 bg-green-500/5 p-12 text-center">
         <CheckCircle size={48} className="text-green-400 mb-4" />
-        <h3 className="text-xl font-semibold">Message Prepared</h3>
+        <h3 className="text-xl font-semibold">Message Sent!</h3>
         <p className="mt-2 text-gray-400">
-          Your email client should have opened with the message. If not, please email us directly at{" "}
-          <a href="mailto:info@trairx.com" className="text-blue-400 hover:underline">info@trairx.com</a>
+          Thank you for reaching out. We will get back to you as soon as possible.
         </p>
         <button
           onClick={() => setSent(false)}
@@ -47,6 +67,11 @@ export default function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
+      {/* FormSubmit config */}
+      <input type="hidden" name="_captcha" value="false" />
+      <input type="hidden" name="_template" value="table" />
+      <input type="text" name="_honey" className="hidden" />
+
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
           <label htmlFor="name" className="block text-sm font-medium text-gray-400 mb-2">
