@@ -9,10 +9,13 @@ import {
   Globe,
   ExternalLink,
 } from "lucide-react";
+import AnimateIn from "./AnimateIn";
+import Link from "next/link";
 
 const products = [
   {
     name: "Zeha Academy",
+    slug: "zeha-academy",
     tagline: "AI Super Platform",
     description:
       "Next-generation conversational AI platform designed to understand, assist, and evolve with users. Turkey\u2019s national AI assistant for education and daily life.",
@@ -23,6 +26,7 @@ const products = [
   },
   {
     name: "Safely",
+    slug: "safely",
     tagline: "Safety Infrastructure",
     description:
       "AI-powered crisis coordination and safety management platform for institutions, universities, and smart cities. Real-time threat detection and response.",
@@ -33,6 +37,7 @@ const products = [
   },
   {
     name: "Checkly",
+    slug: "checkly",
     tagline: "Social Intelligence Layer",
     description:
       "Smart social check-in network that connects people across languages and locations with AI-powered matching and community building.",
@@ -43,6 +48,7 @@ const products = [
   },
   {
     name: "LingoChat",
+    slug: "lingochat",
     tagline: "AI Language Learning",
     description:
       "Conversational AI language learning platform that adapts to your level. Practice with AI tutors in real-time conversations across 30+ languages.",
@@ -53,6 +59,7 @@ const products = [
   },
   {
     name: "Content Queen",
+    slug: "content-queen",
     tagline: "AI Content Management",
     description:
       "Intelligent content creation and management platform powered by AI. Automate your content workflow from ideation to publication.",
@@ -63,6 +70,7 @@ const products = [
   },
   {
     name: "Scoorpe",
+    slug: "scoorpe",
     tagline: "Smart Analytics",
     description:
       "AI-driven analytics and scoring platform that transforms raw data into actionable insights for businesses and organizations.",
@@ -83,31 +91,31 @@ export default function Products() {
 
       <div className="relative z-10 mx-auto max-w-7xl">
         {/* Section header */}
-        <div className="mb-20 max-w-2xl">
-          <p className="mb-3 text-sm font-medium uppercase tracking-widest text-blue-400">
-            Ecosystem
-          </p>
-          <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">
-            Our Products
-          </h2>
-          <p className="mt-4 text-lg text-gray-400">
-            A unified suite of AI-powered products designed to work together,
-            creating intelligent infrastructure for modern challenges.
-          </p>
-        </div>
+        <AnimateIn>
+          <div className="mb-20 max-w-2xl">
+            <p className="mb-3 text-sm font-medium uppercase tracking-widest text-blue-400">
+              Ecosystem
+            </p>
+            <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">
+              Our Products
+            </h2>
+            <p className="mt-4 text-lg text-gray-400">
+              A unified suite of AI-powered products designed to work together,
+              creating intelligent infrastructure for modern challenges.
+            </p>
+          </div>
+        </AnimateIn>
 
         {/* Product grid */}
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {products.map((p) => {
+          {products.map((p, i) => {
             const Icon = p.icon;
             return (
-              <a
-                key={p.name}
-                href={p.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative overflow-hidden rounded-2xl border border-white/5 bg-white/[0.02] p-8 transition-all duration-300 hover:border-white/10 hover:bg-white/[0.04]"
-              >
+              <AnimateIn key={p.name} delay={i * 0.1}>
+                <Link
+                  href={`/products/${p.slug}`}
+                  className="group relative block overflow-hidden rounded-2xl border border-white/5 bg-white/[0.02] p-8 transition-all duration-300 hover:border-white/10 hover:bg-white/[0.04] h-full"
+                >
                 {/* Gradient glow on hover */}
                 <div
                   className={`absolute -right-20 -top-20 h-40 w-40 rounded-full bg-gradient-to-br ${p.color} opacity-0 blur-[80px] transition-opacity duration-500 group-hover:opacity-20`}
@@ -140,14 +148,15 @@ export default function Products() {
 
                   {/* Link */}
                   <div className="mt-6 flex items-center gap-2 text-sm font-medium text-gray-500 transition-colors group-hover:text-white">
-                    Visit Product
+                    Learn More
                     <ExternalLink
                       size={14}
                       className="transition-transform group-hover:translate-x-0.5"
                     />
                   </div>
                 </div>
-              </a>
+              </Link>
+            </AnimateIn>
             );
           })}
         </div>

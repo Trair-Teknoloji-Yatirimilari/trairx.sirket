@@ -6,6 +6,10 @@ export const metadata: Metadata = {
   description:
     "Estonia-based AI technology company developing human-centered artificial intelligence infrastructure for safety, community, and smart city applications.",
   keywords: ["TrairX", "AI", "Technology", "Estonia", "Safely", "Checkly", "Zeha", "LingoChat"],
+  icons: {
+    icon: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
   openGraph: {
     title: "TrairX Technology — Building the AI Ecosystem",
     description:
@@ -14,6 +18,7 @@ export const metadata: Metadata = {
     siteName: "TrairX Technology",
     type: "website",
     locale: "en_US",
+    images: [{ url: "/og-image.svg", width: 1200, height: 630, alt: "TrairX Technology" }],
   },
   twitter: {
     card: "summary_large_image",
