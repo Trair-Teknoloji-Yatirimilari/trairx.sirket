@@ -9,9 +9,9 @@ const productLinks = [
 
 const companyLinks = [
   { label: "About Us", href: "/about" },
-  { label: "Technology", href: "#technology" },
-  { label: "Investors", href: "#investors" },
-  { label: "Contact", href: "#contact" },
+  { label: "Blog", href: "/blog" },
+  { label: "Careers", href: "/careers" },
+  { label: "Contact", href: "/contact" },
 ];
 
 const legalLinks = [

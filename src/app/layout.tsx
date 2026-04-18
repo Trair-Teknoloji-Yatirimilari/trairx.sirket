@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import "./globals.css";
+
+const GA_ID = "G-XXXXXXXXXX"; // TODO: Replace with actual GA4 measurement ID
 
 export const metadata: Metadata = {
   title: "TrairX Technology — Building the AI Ecosystem",
@@ -35,6 +38,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="scroll-smooth">
+      <head>
+        <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} strategy="afterInteractive" />
+        <Script id="gtag-init" strategy="afterInteractive">
+          {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_ID}');`}
+        </Script>
+      </head>
       <body className="bg-[#050505] text-white antialiased">
         {children}
       </body>

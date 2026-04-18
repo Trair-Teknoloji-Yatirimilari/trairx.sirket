@@ -7,8 +7,9 @@ const links = [
   { href: "#products", label: "Ecosystem" },
   { href: "/about", label: "About" },
   { href: "#technology", label: "Technology" },
-  { href: "#investors", label: "Investors" },
-  { href: "#contact", label: "Contact" },
+  { href: "/blog", label: "Blog" },
+  { href: "/careers", label: "Careers" },
+  { href: "/contact", label: "Contact" },
 ];
 
 export default function Navbar() {
